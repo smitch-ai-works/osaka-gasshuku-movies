@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#17140F">
+<title>講義アーカイブ｜大阪全力SNS合宿</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hdr">
+  <div class="wrap">
+    <h1>大阪全力SNS合宿</h1>
+    <a href="#" id="logout" hidden>ログアウト</a>
+  </div>
+</header>
+
+<!-- ログイン前 -->
+<main class="wrap" id="gate">
+  <div class="keyvisual">
+    <img src="assets/hero.jpg" alt="AI ONE【インスタ部門】大阪全力合宿" width="1200" height="675">
+  </div>
+
+  <section class="hero">
+    <p class="theme">LECTURE ARCHIVE</p>
+    <h2>講義アーカイブ</h2>
+    <p class="meta">2026.10.10 SAT – 10.11 SUN ｜ 参加者限定</p>
+  </section>
+
+  <form class="login" id="login" autocomplete="off">
+    <label for="pw">パスワード</label>
+    <input type="password" id="pw" inputmode="text" autocomplete="current-password" required>
+    <p class="err" id="err" role="alert" hidden>パスワードが違います</p>
+    <button type="submit" id="go">講義を見る</button>
+  </form>
+  <p class="vnote">パスワードは合宿参加者にのみお伝えしています。</p>
+</main>
+
+<!-- ログイン後 -->
+<main class="wrap" id="app" hidden>
+  <p class="vlabel" id="now-label">NOW PLAYING</p>
+  <div class="keyvisual player" id="player"></div>
+
+  <section class="card current" id="current"></section>
+
+  <h2 class="page">講義一覧</h2>
+  <p class="lead">見たい講義を選ぶと、上のプレーヤーに切り替わります。</p>
+  <ol class="lectures" id="list"></ol>
+</main>
+
+<footer class="foot wrap">
+  <p>AI ONE【インスタ部門】大阪全力SNS合宿</p>
+  <p>動画の録画・転載・外部共有はご遠慮ください。</p>
+</footer>
+
+<script src="vault.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

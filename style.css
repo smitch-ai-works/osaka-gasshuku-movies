@@ -1,0 +1,106 @@
+/* 配色・書体は合宿サイト（gasshuku-production）と申し込みLPに合わせている。
+   アイボリー地／チャコール／ゴールド箔、見出しは明朝、本文はゴシック、角は落とさない。 */
+:root{
+  --ivory:#F6F3EE; --paper:#FFFFFF; --band:#ECE7DF;
+  --charcoal:#17140F; --ink:#14110D; --muted:#8B8175;
+  --gold:#B08D4C; --gold-l:#E3C88A; --gold-d:#8A6C33;
+  --hair:rgba(20,17,13,.13);
+  --warn:#8C3A22; --warn-bg:#F5EAE4;
+  --min:"Hiragino Mincho ProN","ヒラギノ明朝 ProN","Yu Mincho","游明朝","Noto Serif JP",serif;
+  --go:"Hiragino Kaku Gothic ProN","Yu Gothic","游ゴシック体","Noto Sans JP","Meiryo",sans-serif;
+  --col:760px; --pad:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ivory); color:var(--ink); font-family:var(--go);
+  font-size:15px; line-height:1.9; letter-spacing:.02em;
+  -webkit-text-size-adjust:100%; overflow-wrap:anywhere;
+}
+a{color:var(--gold-d); text-decoration:none}
+[hidden]{display:none !important}
+.wrap{max-width:var(--col); margin-inline:auto; padding-inline:var(--pad)}
+
+/* header */
+.hdr{background:var(--charcoal); color:var(--ivory); padding:15px 0 16px;
+  border-bottom:1px solid rgba(176,141,76,.4)}
+.hdr .wrap{display:flex; align-items:center; gap:10px; justify-content:space-between}
+.hdr h1{font-family:var(--min); font-weight:600; font-size:17px; margin:0; letter-spacing:.1em}
+.hdr a{color:var(--gold-l); font-size:11px; letter-spacing:.06em}
+
+/* キービジュアル・プレーヤー：金の細枠＋余白 */
+.keyvisual{border:1px solid var(--gold); padding:5px; background:var(--paper); margin:18px 0 20px}
+.keyvisual img{display:block; width:100%; height:auto}
+.player{margin-top:0}
+.player iframe{display:block; width:100%; aspect-ratio:16/9; border:0; background:#000}
+.soon{aspect-ratio:16/9; background:var(--charcoal); color:var(--ivory);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:6px}
+.soon b{font-family:var(--min); font-weight:600; font-size:18px; letter-spacing:.14em; color:var(--gold-l)}
+.soon span{font-size:12px; color:#B3A996; letter-spacing:.08em}
+
+.vlabel{display:flex; align-items:center; justify-content:center; gap:10px;
+  font-size:10px; font-weight:700; letter-spacing:.28em; color:var(--gold); margin:22px 0 11px}
+.vlabel::before,.vlabel::after{content:""; width:22px; height:1px; background:var(--gold); opacity:.6}
+.vnote{text-align:center; font-size:12px; color:var(--muted); margin:12px 0 0; letter-spacing:.04em}
+
+.hero{background:var(--charcoal); color:var(--ivory); padding:22px 20px 24px;
+  border-radius:2px; margin:0 0 12px; text-align:center}
+.hero .theme{font-family:var(--min); font-size:11.5px; color:var(--gold-l);
+  letter-spacing:.2em; margin:0 0 9px}
+.hero h2{font-family:var(--min); font-weight:600; margin:0 0 12px;
+  font-size:23px; line-height:1.6; letter-spacing:.08em}
+.hero .meta{font-size:12.5px; color:#B3A996; margin:0; letter-spacing:.08em; line-height:2}
+
+/* login */
+.login{background:var(--paper); border:1px solid var(--hair); border-radius:2px; padding:18px 18px 20px}
+.login label{display:block; font-size:11px; color:var(--muted); letter-spacing:.1em; margin-bottom:4px}
+input[type=password]{width:100%; font:inherit; font-family:var(--go); font-size:16px; padding:11px 12px;
+  border:1px solid var(--hair); border-radius:2px; background:var(--paper); color:var(--ink)}
+input:focus{outline:1px solid var(--gold); outline-offset:1px}
+.login.ng input{border-color:var(--warn)}
+.err{background:var(--warn-bg); color:var(--warn); font-size:12.5px; letter-spacing:.04em;
+  padding:7px 11px; margin:10px 0 0; border-radius:2px}
+.login.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+button{display:block; width:100%; margin-top:14px; font-family:var(--min); font-weight:600; font-size:15px;
+  letter-spacing:.12em; border:0; border-radius:999px; color:#1B1509; padding:13px 24px; cursor:pointer;
+  background:linear-gradient(100deg,var(--gold-d) 0%,var(--gold) 32%,var(--gold-l) 62%,var(--gold) 100%);
+  box-shadow:0 3px 14px rgba(138,108,51,.2)}
+button:disabled{opacity:.6; cursor:wait}
+
+/* 見出し */
+h2.page{font-family:var(--min); font-weight:600; font-size:22px; line-height:1.7;
+  letter-spacing:.08em; margin:30px 0 6px}
+h2.page::after{content:""; display:block; width:34px; height:1px; background:var(--gold); margin:10px 0 0}
+p.lead{color:var(--muted); font-size:13px; line-height:1.95; margin:0 0 16px}
+
+/* 再生中の講義 */
+.card{background:var(--paper); border:1px solid var(--hair); border-radius:2px; padding:16px 18px; margin:0 0 10px}
+.current{border-left:2px solid var(--gold)}
+.current .slot{font-size:10.5px; font-weight:700; letter-spacing:.22em; color:var(--gold-d); margin:0 0 4px}
+.current h3{font-family:var(--min); font-weight:600; font-size:19px; letter-spacing:.04em; margin:0 0 4px; line-height:1.6}
+.current .who{font-size:12.5px; color:var(--muted); letter-spacing:.08em; margin:0 0 8px}
+.current .desc{font-size:14px; margin:0}
+
+/* 講義一覧 */
+.lectures{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:9px}
+.lectures button{all:unset; box-sizing:border-box; display:flex; gap:13px; width:100%; height:100%;
+  background:var(--paper); border:1px solid var(--hair); border-radius:2px; padding:14px 15px;
+  cursor:pointer; -webkit-tap-highlight-color:transparent; transition:border-color .2s, box-shadow .2s}
+.lectures button:hover{border-color:rgba(176,141,76,.6)}
+.lectures button:focus-visible{outline:1px solid var(--gold); outline-offset:2px}
+.lectures .on button{border-color:var(--gold); background:var(--band); box-shadow:0 2px 12px rgba(138,108,51,.14)}
+.lectures .no{flex:0 0 auto; font-family:var(--min); font-size:24px; line-height:1.15; color:var(--gold);
+  font-variant-numeric:tabular-nums; letter-spacing:.02em}
+.lectures .tx{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px}
+.lectures .tx em{font-style:normal; font-size:10px; font-weight:700; letter-spacing:.18em; color:var(--gold-d)}
+.lectures .tx b{font-family:var(--min); font-weight:600; font-size:14.5px; letter-spacing:.03em; line-height:1.6}
+.lectures .tx span{font-size:11.5px; color:var(--muted); letter-spacing:.06em}
+.lectures .st{font-size:10px; letter-spacing:.12em; color:var(--muted); border:1px dashed var(--hair);
+  padding:0 6px; align-self:flex-start; margin-top:4px}
+.lectures .on .st.play{color:var(--gold-d); border:1px solid var(--gold)}
+@media (max-width:560px){ .lectures{grid-template-columns:1fr} }
+
+.foot{margin-top:40px; padding-top:18px; padding-bottom:32px; border-top:1px solid var(--hair);
+  text-align:center; font-size:11px; color:var(--muted); letter-spacing:.06em}
+.foot p{margin:0}
