@@ -30,5 +30,5 @@ const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, k
 const out = `// tools/build-vault.mjs が生成。手で編集しない。\nwindow.VAULT = ${JSON.stringify({ iter: ITER, salt: b64(salt), iv: b64(iv), ct: b64(ct) })};\n`;
 await writeFile(join(root, "vault.js"), out);
 
-const ready = data.lectures.filter((l) => l.loom).length;
+const ready = data.lectures.filter((l) => l.loom || (l.parts || []).some((p) => p.loom)).length;
 console.log(`vault.js written (${data.lectures.length} lectures, ${ready} with Loom link)`);

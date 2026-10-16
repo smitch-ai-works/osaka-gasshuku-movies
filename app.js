@@ -24,16 +24,18 @@
     return JSON.parse(new TextDecoder().decode(plain));
   }
 
-  // Loom の共有リンク（/share/ID）を埋め込み用（/embed/ID）に変える
+  // Loom の共有リンク（loom.com/share/ID）や AI ONE の共有リンク（loom.aione.co.jp/v/ID）を埋め込み用（/embed/ID）に変える
   function embedUrl(link) {
-    const m = String(link).match(/loom\.com\/(?:share|embed)\/([0-9a-f]+)/i);
+    const m = String(link || "").match(/(?:loom\.com\/(?:share|embed)|loom\.aione\.co\.jp\/v)\/([0-9a-f]{32})/i);
     return m ? `https://www.loom.com/embed/${m[1]}?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true` : "";
   }
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   function render(data) {
-    const lectures = data.lectures;
+    // 1講義に動画が複数ある場合（講義とワークを分けて録った等）は parts に並べる
+    const lectures = data.lectures.map((l) => ({ ...l, parts: l.parts || [{ loom: l.loom }] }));
+    const ready = (l) => l.parts.some((p) => embedUrl(p.loom));
     $("gate").hidden = true;
     $("app").hidden = false;
     $("logout").hidden = false;
@@ -41,25 +43,41 @@
     $("list").innerHTML = lectures.map((l, i) => `
       <li data-i="${i}"><button type="button">
         <span class="no">${esc(l.no)}</span>
-        <span class="tx"><em>${esc(l.slot)}</em><b>${esc(l.title)}</b><span>${esc(l.speaker)}</span>
-          <span class="st${l.loom ? " play" : ""}">${l.loom ? "視聴できます" : "準備中"}</span></span>
+        <span class="tx"><em>${esc(l.slot)}</em><b>${esc(l.title)}</b><span>${esc(l.speaker)}${l.len ? ` ｜ ${esc(l.len)}` : ""}</span>
+          <span class="st${ready(l) ? " play" : ""}">${ready(l) ? (l.parts.length > 1 ? `視聴できます（${l.parts.length}本）` : "視聴できます") : "準備中"}</span></span>
       </button></li>`).join("");
 
-    function select(i, scroll) {
-      const l = lectures[i];
-      const src = embedUrl(l.loom);
+    function play(l, k) {
+      const src = embedUrl(l.parts[k].loom);
       $("player").innerHTML = src
         ? `<iframe src="${src}" title="${esc(l.title)}" allow="fullscreen; picture-in-picture" allowfullscreen></iframe>`
         : `<div class="soon"><b>準備中</b><span>動画の公開まで少々お待ちください</span></div>`;
+      document.querySelectorAll("#parts button").forEach((b) => b.classList.toggle("on", +b.dataset.k === k));
+    }
+
+    function select(i, scroll) {
+      const l = lectures[i];
+      const parts = l.parts.length > 1
+        ? `<div class="parts" id="parts">${l.parts.map((p, k) => `
+            <button type="button" data-k="${k}"><b>${esc(p.label)}</b>${p.len ? `<span>${esc(p.len)}</span>` : ""}</button>`).join("")}</div>`
+        : "";
       $("current").innerHTML = `
         <p class="slot">${esc(l.slot)}</p>
         <h3>${esc(l.title)}</h3>
-        <p class="who">講師 ｜ ${esc(l.speaker)}</p>
-        <p class="desc">${esc(l.desc)}</p>`;
+        <p class="who">講師 ｜ ${esc(l.speaker)}${l.len ? ` ｜ ${esc(l.len)}` : ""}</p>
+        <p class="desc">${esc(l.desc)}</p>${parts}`;
+      play(l, 0);
       document.querySelectorAll("#list li").forEach((li) => li.classList.toggle("on", +li.dataset.i === i));
       history.replaceState(null, "", `#${i + 1}`);
       if (scroll) $("now-label").scrollIntoView({ behavior: "smooth", block: "start" });
+      current = l;
     }
+
+    let current;
+    $("current").addEventListener("click", (e) => {
+      const b = e.target.closest("#parts button");
+      if (b) play(current, +b.dataset.k);
+    });
 
     $("list").addEventListener("click", (e) => {
       const li = e.target.closest("li");
