@@ -17,6 +17,10 @@ const enc = new TextEncoder();
 const b64 = (u8) => Buffer.from(u8).toString("base64");
 
 const data = JSON.parse(await readFile(join(root, "lectures.json"), "utf8"));
+// サムネイルもログイン前に見えないよう、画像ファイルを data URL にして暗号化データへ同梱する
+for (const l of data.lectures) {
+  if (l.thumb) l.thumb = "data:image/jpeg;base64," + (await readFile(join(root, l.thumb))).toString("base64");
+}
 const salt = crypto.getRandomValues(new Uint8Array(16));
 const iv = crypto.getRandomValues(new Uint8Array(12));
 

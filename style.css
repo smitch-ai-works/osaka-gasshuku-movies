@@ -33,6 +33,22 @@ a{color:var(--gold-d); text-decoration:none}
 .keyvisual img{display:block; width:100%; height:auto}
 .player{margin-top:0}
 .player iframe{display:block; width:100%; aspect-ratio:16/9; border:0; background:#000}
+/* 再生前の表紙（講義スライドの1枚目） */
+.poster{all:unset; position:relative; display:block; width:100%; cursor:pointer; line-height:0;
+  -webkit-tap-highlight-color:transparent}
+.poster img{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover}
+/* 表紙の文字に被らないよう、再生ボタンは右下に寄せる */
+.poster .pl{position:absolute; right:12px; bottom:12px; display:flex; align-items:center; gap:9px;
+  border-radius:999px; background:rgba(23,20,15,.86); border:1px solid var(--gold-l);
+  padding:9px 16px 9px 13px; line-height:1; box-shadow:0 4px 18px rgba(0,0,0,.3); transition:background .2s}
+.poster .pl::before{content:""; border-style:solid; border-width:7px 0 7px 11px;
+  border-color:transparent transparent transparent var(--gold-l)}
+.poster .pl::after{content:"再生する"; font-family:var(--min); font-weight:600; font-size:13px;
+  letter-spacing:.14em; color:var(--ivory)}
+.poster:hover .pl{background:rgba(23,20,15,.96)}
+@media (max-width:560px){ .poster .pl{right:8px; bottom:8px; padding:7px 12px 7px 10px}
+  .poster .pl::after{font-size:12px} }
+.poster:focus-visible{outline:1px solid var(--gold); outline-offset:2px}
 .soon{aspect-ratio:16/9; background:var(--charcoal); color:var(--ivory);
   display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:6px}
 .soon b{font-family:var(--min); font-weight:600; font-size:18px; letter-spacing:.14em; color:var(--gold-l)}
@@ -92,18 +108,24 @@ p.lead{color:var(--muted); font-size:13px; line-height:1.95; margin:0 0 16px}
 .parts button.on{border-color:var(--gold); color:#1B1509;
   background:linear-gradient(100deg,var(--gold-d) 0%,var(--gold) 32%,var(--gold-l) 62%,var(--gold) 100%)}
 .parts button.on span{color:#3B2F17}
+.slide{display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px;
+  border:1px solid var(--gold); border-radius:999px; padding:9px 14px; color:var(--gold-d);
+  font-family:var(--min); font-weight:600; font-size:14px; letter-spacing:.1em; background:var(--paper)}
+.slide span{font-family:var(--go); font-weight:400; font-size:10.5px; color:var(--muted); letter-spacing:.08em}
+.slide span::before{content:"｜"; margin-right:4px; color:var(--hair)}
+.slide:hover{background:var(--band)}
 
 /* 講義一覧 */
 .lectures{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:9px}
-.lectures button{all:unset; box-sizing:border-box; display:flex; gap:13px; width:100%; height:100%;
-  background:var(--paper); border:1px solid var(--hair); border-radius:2px; padding:14px 15px;
+.lectures button{all:unset; box-sizing:border-box; display:flex; flex-direction:column; gap:11px; width:100%; height:100%;
+  background:var(--paper); border:1px solid var(--hair); border-radius:2px; padding:5px 5px 14px;
   cursor:pointer; -webkit-tap-highlight-color:transparent; transition:border-color .2s, box-shadow .2s}
 .lectures button:hover{border-color:rgba(176,141,76,.6)}
 .lectures button:focus-visible{outline:1px solid var(--gold); outline-offset:2px}
 .lectures .on button{border-color:var(--gold); background:var(--band); box-shadow:0 2px 12px rgba(138,108,51,.14)}
-.lectures .no{flex:0 0 auto; font-family:var(--min); font-size:24px; line-height:1.15; color:var(--gold);
-  font-variant-numeric:tabular-nums; letter-spacing:.02em}
-.lectures .tx{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px}
+.lectures .th{display:block; line-height:0}
+.lectures .th img{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover}
+.lectures .tx{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; padding:0 10px}
 .lectures .tx em{font-style:normal; font-size:10px; font-weight:700; letter-spacing:.18em; color:var(--gold-d)}
 .lectures .tx b{font-family:var(--min); font-weight:600; font-size:14.5px; letter-spacing:.03em; line-height:1.6}
 .lectures .tx span{font-size:11.5px; color:var(--muted); letter-spacing:.06em}

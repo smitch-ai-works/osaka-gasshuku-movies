@@ -13,6 +13,7 @@
 1. `lectures.json`（平文。`.gitignore` 済みでコミットされない）の各講義の `loom` に Loom の共有リンクを入れる
    例: `https://www.loom.com/share/xxxxxxxx` または `https://loom.aione.co.jp/v/xxxxxxxx`
    1講義に動画が複数あるときは `loom` の代わりに `parts`（`label`・`len`・`loom` の配列）を使う。
+   `thumb` はサムネイル画像のパス（`thumbs/` に置く。これも `.gitignore` 済みで、vault.js に暗号化して同梱される）、`slide` は講義スライドの閲覧リンク。
 2. `node tools/build-vault.mjs <パスワード>` で `vault.js` を作り直す
 3. `vault.js` をコミットして push する
 

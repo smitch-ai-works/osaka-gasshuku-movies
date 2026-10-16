@@ -42,18 +42,29 @@
 
     $("list").innerHTML = lectures.map((l, i) => `
       <li data-i="${i}"><button type="button">
-        <span class="no">${esc(l.no)}</span>
+        ${l.thumb ? `<span class="th"><img src="${l.thumb}" alt="" width="1280" height="720" loading="lazy"></span>` : ""}
         <span class="tx"><em>${esc(l.slot)}</em><b>${esc(l.title)}</b><span>${esc(l.speaker)}${l.len ? ` ｜ ${esc(l.len)}` : ""}</span>
           <span class="st${ready(l) ? " play" : ""}">${ready(l) ? (l.parts.length > 1 ? `視聴できます（${l.parts.length}本）` : "視聴できます") : "準備中"}</span></span>
       </button></li>`).join("");
 
-    function play(l, k) {
+    // 選んだ直後はサムネイルを表紙として出し、押したら Loom を読み込んで再生する
+    function play(l, k, start) {
       const src = embedUrl(l.parts[k].loom);
-      $("player").innerHTML = src
-        ? `<iframe src="${src}" title="${esc(l.title)}" allow="fullscreen; picture-in-picture" allowfullscreen></iframe>`
-        : `<div class="soon"><b>準備中</b><span>動画の公開まで少々お待ちください</span></div>`;
+      if (!src) {
+        $("player").innerHTML = `<div class="soon"><b>準備中</b><span>動画の公開まで少々お待ちください</span></div>`;
+      } else if (start || !l.thumb) {
+        $("player").innerHTML = `<iframe src="${src}${start ? "&autoplay=1" : ""}" title="${esc(l.title)}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      } else {
+        $("player").innerHTML = `<button type="button" class="poster" data-k="${k}" aria-label="${esc(l.title)}を再生">
+          <img src="${l.thumb}" alt="" width="1280" height="720"><span class="pl"></span></button>`;
+      }
       document.querySelectorAll("#parts button").forEach((b) => b.classList.toggle("on", +b.dataset.k === k));
     }
+
+    $("player").addEventListener("click", (e) => {
+      const b = e.target.closest(".poster");
+      if (b) play(current, +b.dataset.k, true);
+    });
 
     function select(i, scroll) {
       const l = lectures[i];
@@ -65,18 +76,19 @@
         <p class="slot">${esc(l.slot)}</p>
         <h3>${esc(l.title)}</h3>
         <p class="who">講師 ｜ ${esc(l.speaker)}${l.len ? ` ｜ ${esc(l.len)}` : ""}</p>
-        <p class="desc">${esc(l.desc)}</p>${parts}`;
+        <p class="desc">${esc(l.desc)}</p>${parts}${l.slide ? `
+        <a class="slide" href="${esc(l.slide)}" target="_blank" rel="noopener noreferrer">講義スライドを見る<span>Canva</span></a>` : ""}`;
+      current = l;
       play(l, 0);
       document.querySelectorAll("#list li").forEach((li) => li.classList.toggle("on", +li.dataset.i === i));
       history.replaceState(null, "", `#${i + 1}`);
       if (scroll) $("now-label").scrollIntoView({ behavior: "smooth", block: "start" });
-      current = l;
     }
 
     let current;
     $("current").addEventListener("click", (e) => {
       const b = e.target.closest("#parts button");
-      if (b) play(current, +b.dataset.k);
+      if (b) play(current, +b.dataset.k, true);
     });
 
     $("list").addEventListener("click", (e) => {
